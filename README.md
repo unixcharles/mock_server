@@ -1,27 +1,34 @@
 # MockServer
 
-So you have spec for your models and controller for your API.
-Now you're building a neat javascript application that consumer that JSON.
+You're building a neat javascript application that consume JSON...
+
+So you have spec for your models and controller for your API, you do?
+
 And you're going to test it with something like capybara?
-The thing is that its going to be slow! And you're testing testing all you're application logic again!
+
+... The thing is that its going to be slow, and you're testing testing all you're application logic again!
 
 MockServer allow you to record your interaction with the server and give you a way to match
-the record request with the real request. Its like a rack [VCR](https://github.com/myronmarston/vcr) for your own API!
+the record request with the real request. 
+
+Its like a rack [VCR](https://github.com/myronmarston/vcr) for your own API!
 
 # Recording mode
 
 Create mount the rack application, in rails
 
     require 'mock_server/record'
-    config.middleware.use MockServer::Record, { :path => 'fixtures/records', :filename => 'uploads'
-                                               :routes => [ '/api/*/**', '/api/*/**' ] }
+    config.middleware.use MockServer::Record, 
+      { :path => 'fixtures/records', :filename => 'uploads'
+        :routes => [ '/api/*/**', '/api/*/**' ] }
 
 And you're ready to record. Run the test, build so seed by clicking around. whatever.
 
 # Playback mode
 
     require 'mock_server/playback'
-    config.middleware.use MockServer::Playback, { :path => 'fixtures/records' ] }
+    config.middleware.use MockServer::Playback, 
+      { :path => 'fixtures/records' }
 
 Recording your own playback? Noes, don't use the two Rack middleware at the same time.
 

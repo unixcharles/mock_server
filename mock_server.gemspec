@@ -10,5 +10,5 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
 
   s.add_runtime_dependency 'rack'
-  s.add_runtime_dependency 'hashie', '~> 1.2'
+  s.add_runtime_dependency 'hashie'
 end

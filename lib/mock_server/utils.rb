@@ -6,8 +6,8 @@ module MockServer
     def lazy_match(strings, path)
       regexps = strings.map { |str|
         escaped = Regexp.escape(str)
-        escaped.gsub!('\\*\\*', '[\w|\/]+')
-        escaped.gsub!('\\*', '[\w]+')
+        escaped.gsub!('\\*\\*', '[\w|.|\-|\/]+')
+        escaped.gsub!('\\*', '[\w|.|\-]+')
         Regexp.new("^#{escaped}$")
       }
 

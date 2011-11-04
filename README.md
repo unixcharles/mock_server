@@ -54,9 +54,7 @@ In your spec
     end
 
     after :each do
-      mock_server_disable_all_routes!
-      mock_server_clear_matchers!
-      mock_server_response_stack_clear!
+      mock_server_reset!
     end
 
     scenario "Some json api fun" do

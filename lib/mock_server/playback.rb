@@ -11,11 +11,11 @@ module MockServer
     end
 
     def call(env)
-      return @app.call(env) unless $mock_server_options and
-                                   $mock_server_options[:routes] and
-                                   lazy_match $mock_server_options[:routes], env["PATH_INFO"]
-
       @options.merge!($mock_server_options)
+
+      verbose(env, $mock_server_options) if @options[:verbose]
+      return @app.call(env) unless @options[:routes] and
+                                   lazy_match @options[:routes], env["PATH_INFO"]
 
       @request = Rack::Request.new(env)
       @data = load_data

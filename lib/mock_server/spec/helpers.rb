@@ -135,6 +135,14 @@ module MockServer
         mock_server_errors_stack_clear!
       end
 
+      # Clear all the settings
+
+      def mock_server_reset!
+        mock_server_response_stack_clear!
+        mock_server_clear_matchers!
+        mock_server_disable_all_routes!
+      end
+
       protected
       # Configuration
       def mock_server_config_set(key, value)

@@ -8,4 +8,7 @@ Gem::Specification.new do |s|
 
   s.files        = Dir['README.md', 'LICENSE', 'lib/mock_server.rb', 'lib/mock_server/record.rb', 'lib/mock_server/playback.rb', 'lib/mock_server/utils.rb', 'lib/mock_server/spec/helpers.rb']
   s.require_path = 'lib'
+
+  s.add_runtime_dependency 'rack'
+  s.add_runtime_dependency 'hashie', '~> 1.2'
 end

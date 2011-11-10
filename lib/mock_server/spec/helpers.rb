@@ -63,7 +63,12 @@ module MockServer
 
       # Configuration
       def mock_server_use_record(filename)
-        mock_server_config_set(:filename, filename)
+        mock_server_config_set(:record_filenames, [filename])
+      end
+
+      def mock_server_add_record(*arguments)
+        config = mock_server_config_get(:record_filenames) + arguments
+        mock_server_config_set(:record_filenames, config)
       end
 
       def mock_server_set_fixture_path(path)
@@ -148,6 +153,11 @@ module MockServer
       def mock_server_config_set(key, value)
         $mock_server_options ||= {}
         $mock_server_options[key] = value
+      end
+
+      def mock_server_config_get(key)
+        $mock_server_options ||= {}
+        $mock_server_options[key]
       end
 
       # Matchers helpers

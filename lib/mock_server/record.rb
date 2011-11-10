@@ -38,5 +38,27 @@ module MockServer
       save_data(@data)
     end
 
+    def records_path
+      File.join( @options[:path], @options[:filename] + '.yml' )
+    end
+
+    def save_data(data)
+      File.open(records_path, 'w') do |f|
+        YAML.dump(data, f)
+      end
+    end
+
+    def load_data
+      FileUtils.mkdir_p(@options[:path]) unless File.exists? @options[:path]
+
+      data = YAML.load_file(records_path) rescue []
+
+      if data.is_a? Array
+        data
+      else
+        []
+      end
+    end
+
   end
 end

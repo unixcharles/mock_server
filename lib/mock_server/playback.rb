@@ -65,5 +65,21 @@ module MockServer
       }
     end
 
+    def load_data
+      FileUtils.mkdir_p(@options[:path]) unless File.exists? @options[:path]
+
+      data = []
+
+      @options[:record_filenames].map do |filename|
+        file_path = File.join( @options[:path], filename + '.yml' )
+        content   = File.open(file_path).read
+        compiled  = ERB.new(content).result
+        parsed    = YAML.load(compiled)
+        data     += parsed
+      end
+
+      data
+    end
+
   end
 end

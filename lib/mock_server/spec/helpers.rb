@@ -62,12 +62,12 @@ module MockServer
       end
 
       # Configuration
-      def mock_server_use_record(filename)
-        mock_server_config_set(:record_filenames, [filename])
+      def mock_server_use_record(*arguments)
+        mock_server_config_set(:record_filenames, arguments)
       end
 
       def mock_server_add_record(*arguments)
-        config = mock_server_config_get(:record_filenames) + arguments
+        config = (mock_server_config_get(:record_filenames) || []) + arguments
         mock_server_config_set(:record_filenames, config)
       end
 

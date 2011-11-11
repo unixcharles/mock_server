@@ -118,6 +118,13 @@ module MockServer
       end
 
       # Errors / Success stack
+      def mock_server_requests_stack
+        $mock_server_options[:requests_stack] || []
+      end
+
+      def mock_server_requests_stack_clear!
+        $mock_server_options[:requests_stack] = []
+      end
 
       def mock_server_errors_stack
         $mock_server_options[:errors_stack] || []
@@ -136,6 +143,7 @@ module MockServer
       end
 
       def mock_server_response_stack_clear!
+        mock_server_requests_stack_clear!
         mock_server_success_stack_clear!
         mock_server_errors_stack_clear!
       end

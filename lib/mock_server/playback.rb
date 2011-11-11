@@ -18,6 +18,10 @@ module MockServer
                                    lazy_match @options[:routes], env["PATH_INFO"]
 
       @request = Rack::Request.new(env)
+
+      $mock_server_options[:requests_stack] ||= []
+      $mock_server_options[:requests_stack] << @request.path
+
       @data = load_data
 
       record = match_request

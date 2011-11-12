@@ -118,6 +118,13 @@ module MockServer
       end
 
       # Errors / Success stack
+      def mock_server_requests_stack
+        $mock_server_options[:requests_stack] || []
+      end
+
+      def mock_server_requests_stack_clear!
+        $mock_server_options[:requests_stack] = []
+      end
 
       def mock_server_errors_stack
         $mock_server_options[:errors_stack] || []
@@ -136,6 +143,7 @@ module MockServer
       end
 
       def mock_server_response_stack_clear!
+        mock_server_requests_stack_clear!
         mock_server_success_stack_clear!
         mock_server_errors_stack_clear!
       end
@@ -148,7 +156,15 @@ module MockServer
         mock_server_disable_all_routes!
       end
 
+      def mock_server_reraise_matcher_exceptions
+        $mock_server_options[:matcher_exceptions] ||= []
+        $mock_server_options[:matcher_exceptions].each do |exception|
+          raise exception
+        end
+      end
+
       protected
+
       # Configuration
       def mock_server_config_set(key, value)
         $mock_server_options ||= {}

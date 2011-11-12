@@ -61,12 +61,25 @@ module MockServer
 
         matchers.detect { |matcher|
           if matcher[:matcher]
-            matcher[:matcher].call(request, recorded_request) rescue false
+            result = true
+            begin
+              matcher[:matcher].call(request, recorded_request)
+            rescue => matcher_err
+              store_matcher_exception(matcher_err)
+              result = false
+            ensure
+              result
+            end
           else
             true
           end
         }
       }
+    end
+
+    def store_matcher_exception(exception)
+      $mock_server_options[:matcher_exceptions] ||= []
+      $mock_server_options[:matcher_exceptions] << exception
     end
 
     def load_data

@@ -156,7 +156,15 @@ module MockServer
         mock_server_disable_all_routes!
       end
 
+      def mock_server_reraise_matcher_exceptions
+        $mock_server_options[:matcher_exceptions] ||= []
+        $mock_server_options[:matcher_exceptions].each do |exception|
+          raise exception
+        end
+      end
+
       protected
+
       # Configuration
       def mock_server_config_set(key, value)
         $mock_server_options ||= {}

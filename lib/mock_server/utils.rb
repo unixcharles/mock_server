@@ -22,12 +22,22 @@ module MockServer
     end
 
     def hashified_request
-      body = JSON.parse(@request.body.to_a.join) rescue ''
+      #rewind to ensure we read from the start
+      @request.body.rewind
+
+      #read body
+      body = @request.body.read
+
+      #rewind in case upstream expects it rewound
+      @request.body.rewind
+
+      json = JSON.parse(body) rescue ''
+
       {
         :method  => @request.request_method,
         :path    => @request.path,
         :query   => @request.query_string,
-        :body    => body
+        :body    => json
       }
     end
   

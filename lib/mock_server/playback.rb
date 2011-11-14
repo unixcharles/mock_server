@@ -1,4 +1,6 @@
 require 'mock_server/utils'
+require 'erb'
+require 'hashie'
 
 module MockServer
   class Playback

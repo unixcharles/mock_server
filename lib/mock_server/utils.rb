@@ -1,3 +1,6 @@
+require 'yaml'
+require 'json'
+
 module MockServer
   module Utils
 

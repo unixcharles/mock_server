@@ -31,7 +31,7 @@ module MockServer
       #rewind in case upstream expects it rewound
       @request.body.rewind
 
-      json = JSON.parse(body) rescue ''
+      json = JSON.parse(body) rescue body
 
       {
         :method  => @request.request_method,

@@ -5,20 +5,21 @@ rescue NameError
 end
 
 require File.expand_path('../../lib/mock_server/record', __FILE__)
+require File.expand_path('../../lib/mock_server/spec/helpers', __FILE__)
 require File.expand_path('../../lib/mock_server/utils', __FILE__)
-
-include Rack::Test::Methods
 
 $tmp_path = File.join(File.dirname(__FILE__), 'tmp')
 
-def app
-  MockServer::Record.new( MockServer::Test.new, {
-    :path => $tmp_path + '/records',
-    :filename => 'test',
-    :routes => [ '/hello.json' ] })
-end
-
 describe "Record" do
+  include Rack::Test::Methods
+  include MockServer::Spec::Helpers
+
+  def app
+    MockServer::Record.new( MockServer::Test.new, {
+      :path => $tmp_path + '/records',
+      :filename => 'test',
+      :routes => [ '/hello.json' ] })
+  end
 
   after do
     FileUtils.rm_rf $tmp_path

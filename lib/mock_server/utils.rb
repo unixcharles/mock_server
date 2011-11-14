@@ -41,17 +41,17 @@ module MockServer
       }
     end
   
-    def hashify_response(response)
-      status  = response[0]
-      headers = response[1]
-      body    = response[2].body rescue ''
-
+    def hashify_response(status, header, response)
       {
         :method  => @request.request_method,
         :path    => @request.path,
         :status  => status,
-        :headers => headers,
-        :body    => body
+        :headers => header,
+        :body    => if response.respond_to? :body
+          response.body
+        else
+          response.join
+        end
       }
     end
   end

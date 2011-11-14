@@ -22,19 +22,19 @@ module MockServer
       @request = Rack::Request.new(env)
       @data = load_data
 
-      @app.call(env).tap do |response|
-        record_response(response)
+      @app.call(env).tap do |status, header, response|
+        record_response(status, header, response)
         response
       end
     end
   
     private
     
-    def record_response(response)
+    def record_response(status, header, response)
       request = hashified_request
       @data.reject! { |record| record[:request] == request }
 
-      @data << { :request => request, :response => hashify_response(response) }
+      @data << { :request => request, :response => hashify_response(status, header, response) }
       save_data(@data)
     end
 

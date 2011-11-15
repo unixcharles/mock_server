@@ -1,45 +1,54 @@
-require 'mock_server/utils'
 require 'erb'
 require 'hashie'
+
+require_relative 'utils'
+require_relative 'state'
+
+unless defined? MockServer::Store
+  require_relative 'store/global'
+end
 
 module MockServer
   class Playback
     include MockServer::Utils
+    include MockServer::Store
 
-    def initialize(app, options = {})
-      @options = options
+    def initialize(app, opt = {})
       @app = app
-      $mock_server_options ||= options
+      @options = mock_server_options_merge(opt)
     end
 
     def call(env)
-      @options.merge!($mock_server_options)
+      @options = self.mock_server_options_read
 
-      verbose(env, $mock_server_options) if @options[:verbose]
+      verbose(env) if @options[:verbose]
       return @app.call(env) unless @options[:routes] and
                                    lazy_match @options[:routes], env["PATH_INFO"]
 
       @request = Rack::Request.new(env)
 
-      $mock_server_options[:requests_stack] ||= []
-      $mock_server_options[:requests_stack] << @request.path
+      @options[:requests_stack] ||= []
+      @options[:requests_stack] << @request.path
 
       @data = load_data
 
       record = match_request
 
-      if record
-        $mock_server_options[:success_stack] ||= []
-        $mock_server_options[:success_stack] << @request.path
+      response = if record
+        @options[:success_stack] ||= []
+        @options[:success_stack] << @request.path
 
         response = record[:response]
         [response[:status], response[:headers], [response[:body]]]
       else
-        $mock_server_options[:errors_stack] ||= []
+        @options[:errors_stack] ||= []
         error = { @request.path => "Couldn't match #{@request.request_method} #{@request.path}" }
-        $mock_server_options[:errors_stack] << error
+        @options[:errors_stack] << error
         [404, {}, ['RECORD NOT FOUND!']]
       end
+
+      self.mock_server_options_write(@options)
+      response
     end
 
     private
@@ -80,8 +89,8 @@ module MockServer
     end
 
     def store_matcher_exception(exception)
-      $mock_server_options[:matcher_exceptions] ||= []
-      $mock_server_options[:matcher_exceptions] << exception
+      @options[:matcher_exceptions] ||= []
+      @options[:matcher_exceptions] << exception
     end
 
     def load_data

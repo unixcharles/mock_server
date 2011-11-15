@@ -1,29 +1,33 @@
-require 'mock_server/utils'
+require_relative 'utils'
+require_relative 'state'
+
+unless defined? MockServer::Store
+  require_relative 'store/global'
+end
 
 module MockServer
   class Record
     include MockServer::Utils
+    include MockServer::Store
 
-    def initialize(app, options = {})
-      @options = options
+    def initialize(app, opt = {})
       @app = app
-      $mock_server_options ||= options
+      @options = mock_server_options_merge(opt)
     end
 
     def call(env)
-      @options.merge!($mock_server_options)
+      @options = self.mock_server_options_read
 
-      verbose(env, $mock_server_options) if @options[:verbose]
+      verbose(env) if @options[:verbose]
       return @app.call(env) unless @options[:routes] and
                                    lazy_match @options[:routes], env["PATH_INFO"]
-
-      @options.merge!($mock_server_options)
 
       @request = Rack::Request.new(env)
       @data = load_data
 
       @app.call(env).tap do |status, header, response|
         record_response(status, header, response)
+        self.mock_server_options_write(@options)
         response
       end
     end

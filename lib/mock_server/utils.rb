@@ -6,11 +6,9 @@ module MockServer
 
     private
 
-    def verbose(env, options)
-      if options
-        interception = lazy_match(options[:routes], env["PATH_INFO"]) ? "intercepted!" : "NOT intercepted."
-        puts %([MockServer] #{env["PATH_INFO"]} was #{interception}"\n)
-      end
+    def verbose(env)
+      interception = lazy_match(@options[:routes], env["PATH_INFO"]) ? "intercepted!" : "NOT intercepted."
+      puts %([MockServer] #{env["PATH_INFO"]} was #{interception}"\n)
     end
 
     def lazy_match(strings, path)

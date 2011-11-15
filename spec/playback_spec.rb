@@ -6,7 +6,6 @@ end
 
 require File.expand_path('../../lib/mock_server/playback', __FILE__)
 require File.expand_path('../../lib/mock_server/spec/helpers', __FILE__)
-require File.expand_path('../../lib/mock_server/utils', __FILE__)
 
 describe "Playback" do
   include Rack::Test::Methods

@@ -6,7 +6,6 @@ end
 
 require File.expand_path('../../lib/mock_server/record', __FILE__)
 require File.expand_path('../../lib/mock_server/spec/helpers', __FILE__)
-require File.expand_path('../../lib/mock_server/utils', __FILE__)
 
 $tmp_path = File.join(File.dirname(__FILE__), 'tmp')
 

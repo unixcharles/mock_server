@@ -35,6 +35,7 @@ module MockServer
 
       response = if record
         @options[:success_stack] << @request.path
+        @options[:matcher_exceptions].clear
 
         response = record[:response]
         [response[:status], response[:headers], [response[:body]]]

@@ -69,7 +69,7 @@ module MockServer
         recorded_request  = Hashie::Mash.new entry[:request]
 
         body = JSON.parse(entry[:response][:body]) rescue nil
-        entry[:response][:body] if body
+        entry[:response][:body] = body if body
 
         recorded_response = Hashie::Mash.new entry[:response]
 

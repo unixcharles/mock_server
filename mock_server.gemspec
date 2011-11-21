@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
 
   s.files        = Dir['README.md', 'LICENSE', 'lib/mock_server.rb',
                        'lib/mock_server/record.rb', 'lib/mock_server/playback.rb',
-                       'lib/mock_server/utils.rb', 'lib/mock_server/state.rb', 'lib/mock_server/store/global.rb'
+                       'lib/mock_server/utils.rb', 'lib/mock_server/state.rb', 'lib/mock_server/store/global.rb',
                        'lib/mock_server/spec/helpers.rb']
 
   s.require_path = 'lib'

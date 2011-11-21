@@ -67,6 +67,8 @@ module MockServer
       # Match the request with a record by validating against the matcher if any.
       @data.detect { |entry|
         recorded_request  = Hashie::Mash.new entry[:request]
+
+        entry[:response][:body] = JSON.parse entry[:response][:body] rescue entry[:response][:body]
         recorded_response = Hashie::Mash.new entry[:response]
 
         matchers.detect { |matcher|

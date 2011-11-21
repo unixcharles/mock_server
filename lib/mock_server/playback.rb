@@ -27,7 +27,6 @@ module MockServer
 
       @request = Rack::Request.new(env)
 
-      @options[:requests_stack] ||= []
       @options[:requests_stack] << @request.path
 
       @data = load_data
@@ -35,13 +34,11 @@ module MockServer
       record = match_request
 
       response = if record
-        @options[:success_stack] ||= []
         @options[:success_stack] << @request.path
 
         response = record[:response]
         [response[:status], response[:headers], [response[:body]]]
       else
-        @options[:errors_stack] ||= []
         error = { @request.path => "Couldn't match #{@request.request_method} #{@request.path}" }
         @options[:errors_stack] << error
         [404, {}, ['RECORD NOT FOUND!']]
@@ -89,7 +86,6 @@ module MockServer
     end
 
     def store_matcher_exception(exception)
-      @options[:matcher_exceptions] ||= []
       @options[:matcher_exceptions] << exception
     end
 

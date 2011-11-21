@@ -9,6 +9,8 @@ module MockServer
     property :requests_stack, :default => []
     property :success_stack, :default => []
     property :errors_stack, :default => []
+    property :requests_stack, :default => []
+    property :matcher_exceptions, :default => []
 
     def merge(hash)
       new_hash = self

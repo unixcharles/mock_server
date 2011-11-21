@@ -14,7 +14,7 @@ module MockServer
 
       # Configuration
       def mock_server_use_record(*arguments)
-        mock_server_config_set(:record_filenames, arguments)
+        mock_server_options_set(:record_filenames, arguments)
       end
 
       def mock_server_add_record(*arguments)
@@ -23,7 +23,7 @@ module MockServer
       end
 
       def mock_server_set_fixture_path(path)
-        mock_server_config_set(:path, path)
+        mock_server_options_set(:path, path)
       end
 
       # Active path config

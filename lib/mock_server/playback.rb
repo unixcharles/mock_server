@@ -66,13 +66,14 @@ module MockServer
 
       # Match the request with a record by validating against the matcher if any.
       @data.detect { |entry|
-        recorded_request = Hashie::Mash.new entry[:request]
+        recorded_request  = Hashie::Mash.new entry[:request]
+        recorded_response = Hashie::Mash.new entry[:response]
 
         matchers.detect { |matcher|
           if matcher[:matcher]
             result = true
             begin
-              matcher[:matcher].call(request, recorded_request)
+              matcher[:matcher].call(request, recorded_request, recorded_response)
             rescue => matcher_err
               store_matcher_exception(matcher_err)
               result = false

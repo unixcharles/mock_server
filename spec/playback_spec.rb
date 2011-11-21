@@ -56,4 +56,13 @@ describe "Playback" do
     assert_equal 'success post with body', last_response.body
   end
 
+  it "pass the parse recorded response and pass it to the matcher block" do
+    mock_server_get('/json_response.json') do |request, recorded_request, recorded_response|
+      recorded_response.body.json == 'content'
+    end
+
+    get '/json_response.json'
+    assert_equal '{"json":"content"}', last_response.body
+  end
+
 end

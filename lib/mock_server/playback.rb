@@ -67,11 +67,10 @@ module MockServer
       # Match the request with a record by validating against the matcher if any.
       @data.detect { |entry|
         recorded_request  = Hashie::Mash.new entry[:request]
+        recorded_response = entry[:response].dup
 
-        body = JSON.parse(entry[:response][:body]) rescue nil
-        entry[:response][:body] = body if body
-
-        recorded_response = Hashie::Mash.new entry[:response]
+        recorded_response[:body] = JSON.parse(recorded_response[:body]) rescue recorded_response[:body]
+        recorded_response = Hashie::Mash.new recorded_response
 
         matchers.detect { |matcher|
           if matcher[:matcher]

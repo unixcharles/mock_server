@@ -68,7 +68,9 @@ module MockServer
       @data.detect { |entry|
         recorded_request  = Hashie::Mash.new entry[:request]
 
-        entry[:response][:body] = JSON.parse entry[:response][:body] rescue entry[:response][:body]
+        body = JSON.parse(entry[:response][:body]) rescue nil
+        entry[:response][:body] if body
+
         recorded_response = Hashie::Mash.new entry[:response]
 
         matchers.detect { |matcher|

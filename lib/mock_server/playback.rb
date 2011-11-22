@@ -55,7 +55,7 @@ module MockServer
       request = Hashie::Mash.new hashified_request
 
       # Filter out data records by path and method
-      @data.select! { |record|
+      @data = @data.select { |record|
         record[:request][:path] == request[:path] and record[:request][:method] == request[:method]
       }
 

@@ -36,7 +36,6 @@ module MockServer
     
     def record_response(status, header, response)
       request = hashified_request
-      @data.reject! { |record| record[:request] == request }
 
       @data << { :request => request, :response => hashify_response(status, header, response) }
       save_data(@data)

@@ -1,3 +1,5 @@
+5ab647c (HEAD, master) Adding HISTORY.txt
+d1c7c05 Bump 0.2.4
 61d98b6 (HEAD, master) Don't reject duplicate requests when recording. Record everything
 2000e0b Adding Makefile
 a68aa7b Adding Gemfile and lock

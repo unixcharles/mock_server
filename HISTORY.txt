@@ -1,0 +1,100 @@
+61d98b6 (HEAD, master) Don't reject duplicate requests when recording. Record everything
+2000e0b Adding Makefile
+a68aa7b Adding Gemfile and lock
+9e94998 Fixing requires so that they work both for 1.9.x and 1.8.x
+
+=============================================================
+VERSION 0.2.4
+=============================================================
+
+bce231b (origin/master, origin/HEAD) fix gemspec
+b01d744 bump
+17f7615 fix for 1.8.7 compatibility
+
+=============================================================
+VERSION 0.2.3
+=============================================================
+
+1ee414a Bump 0.2.2
+464c1b6 Add fixture case with json body response
+5b627ab Add spec for recoreded_response
+de359c2 Don't modify the data entry en result while parsing JSON!
+7568005 Fix missing assignment! Oops, i'm tired
+
+=============================================================
+VERSION 0.2.2
+=============================================================
+
+ffa8c53 Bump 0.2.1
+a06805a Syntax fix parsing json
+75a4a8b Parse the body before passing to the matchers block
+9dcaf70 Also pass the recorded response object to matcher proc as third argument
+4ea3934 Fix gemspec syntax typo
+
+=============================================================
+VERSION 0.2.1
+=============================================================
+
+b073a5b Bump 0.2!
+7c65b1d Add Saimon to author list
+d82c1f6 Fix helpers. Missing argument setter for the new abstracted storage.
+81bff15 If its a success, assume that the previous exception where unmatched request.
+db38d70 Don't initialize :success_stack, :requests_stack, :errors_stack. They already default to empty array with the State class.
+4c5a760 Refactor record spec, use instance variable instead of a global
+95e2f4c Remove useless require in spec
+dfaaf6c Refactoring.
+9c90a75 Add record fixture for playback test
+cd81475 add playback spec
+cad4f21 Add needed require to playback for Erb and Hashie
+ca2cc75 Move rack app initialize inside the spec, include spec helpers
+
+=============================================================
+VERSION 0.2
+=============================================================
+
+14155b5 Bump 0.1.5
+6e1dd39 State.rb isn't ready, shouldn't be here
+3723790 Add Rakefile to run the test
+2d117a0 Add a first spec for the record middleware
+d409009 Require 'yaml' and 'json' in the utils module
+421dd2f Change hashified request to fallback to plain body instead of empty string.
+a80cb0d Change hashify_response to deal with both, action dispatch and rack request
+bbe2f9a Merge pull request #1 from saimonmoore/miscellaneous_fixes
+c63e46a Store any exceptions from matcher proc (e.g. rspec expectation exceptions) and reraise in mock_server_reset
+f421e93 Rewind rack request.body before reading
+f87fd29 Adding mock_server_requests_stack spec helper to hold list of attempted requests.
+
+=============================================================
+VERSION 0.1.4
+=============================================================
+
+d4a94b5 Bump! 0.1.4
+8b54a2d Allow initialization of the setting with mock_server_add_record, change mock_server_use_record to take array
+717b287 New spec helper to mock_server_add_record
+163af1a Add the possibility to use multiple fixture at the same time in playback mode.
+
+=============================================================
+VERSION 0.1.3
+=============================================================
+
+2e11f61 bump 0.1.3
+0ff9540 Add verbose mode
+
+=============================================================
+VERSION 0.1.2
+=============================================================
+
+a09c0ad Bump 0.1.2
+59c1635 No reason to explicitly specify hashie version, since its not directly used in the app
+
+=============================================================
+VERSION 0.1.1
+=============================================================
+
+4e31ffd Bump 0.1.1
+afd2800 Include dependency in the gemspec
+5d5e3b2 Update the README to use mock_server_reset! in the example
+59efee1 Add mock_server_reset! helper
+b7a3218 Fix catch all notation regex to not stop at '.' and '-'.
+1303f3f Improve the readme
+2e618d8 Initial commit

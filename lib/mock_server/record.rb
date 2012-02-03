@@ -1,8 +1,8 @@
-require_relative 'utils'
-require_relative 'state'
+require 'mock_server/utils'
+require 'mock_server/state'
 
 unless defined? MockServer::Store
-  require_relative 'store/global'
+  require 'mock_server/store/global'
 end
 
 module MockServer

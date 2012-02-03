@@ -1,9 +1,4 @@
-begin 
-  require_relative 'spec_helper'
-rescue NameError
-  require File.expand_path('spec_helper', __FILE__)
-end
-
+require File.expand_path('../spec_helper', __FILE__)
 require File.expand_path('../../lib/mock_server/playback', __FILE__)
 require File.expand_path('../../lib/mock_server/spec/helpers', __FILE__)
 

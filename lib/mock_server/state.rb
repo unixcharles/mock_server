@@ -1,3 +1,5 @@
+require 'hashie'
+
 module MockServer
   class State < Hashie::Dash
     property :path, :default => 'fixtures/records'

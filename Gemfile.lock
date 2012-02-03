@@ -1,0 +1,27 @@
+PATH
+  remote: .
+  specs:
+    mock_server (0.2.3)
+      hashie
+      rack
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    hashie (1.2.0)
+    json (1.4.6)
+    minitest (2.11.1)
+    rack (1.4.1)
+    rack-test (0.6.1)
+      rack (>= 1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  hashie
+  json
+  minitest
+  mock_server!
+  rack
+  rack-test

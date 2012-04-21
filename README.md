@@ -114,11 +114,15 @@ scenario "Some JSON api fun" do
 end
 ```
 
-Have a look at the [helpers](https://github.com/unixcharles/mock_server/blob/master/lib/mock_server/spec/helpers.rb).
+Have a look at the [helpers](http://rubydoc.info/github/unixcharles/mock_server/master/MockServer/Spec/Helpers).
 
 ## Pull request?
 
 Yes.
+
+## Documentation
+
+[rubydoc](http://rubydoc.info/github/unixcharles/mock_server/master)
 
 ## Credits
 

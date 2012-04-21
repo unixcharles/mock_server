@@ -2,6 +2,8 @@
 
 __MockServer let you record interactions with Rack-apps and provide playback with advanced request matching for your tests.__
 
+[![Build Status](https://secure.travis-ci.org/unixcharles/mock_server.png?branch=master)](http://travis-ci.org/unixcharles/mock_server)
+
 MockServer is an answer from a real world problem at [Teambox](http://teambox.com) and we use it extensively for our entire acceptance test suites.
 
 When building javascript application that communicate with the backend over an API, you will find yourself the entire stack again and again, waiting after the database while you only want ensure that your javascript applicatin is correctly communicating with the server.

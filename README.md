@@ -2,9 +2,7 @@
 
 __MockServer let you record interactions with Rack-apps and provide playback with advanced request matching for your tests.__
 
-## Why
-
-MockServer is born from real world problem at [Teambox](http://teambox.com) and we use it extensively for our entire acceptance test suites.
+MockServer is an answer from a real world problem at [Teambox](http://teambox.com) and we use it extensively for our entire acceptance test suites.
 
 When building javascript application that communicate with the backend over an API, you will find yourself the entire stack again and again, waiting after the database while you only want ensure that your javascript applicatin is correctly communicating with the server.
 
@@ -17,6 +15,20 @@ Run test against a completely fake server, don't hit you application stack.
 ### Test isolation.
 
 Avoid duplicated testing. Test your API in its own test suite and let the frontend perform request against fixtures to avoid testing the entire stack (again).
+
+MockServer is a very light solution divided in three parts.
+
+* a recording Rack middleware
+* a playback Rack middleware
+* an helper module to use inside your tests
+
+# Getting started
+
+## Installation
+
+```bash
+gem install mock_server
+```
 
 ## Recording mode
 
@@ -100,7 +112,7 @@ scenario "Some JSON api fun" do
 end
 ```
 
-Have a look at the [helpers](mock_server/spec/helpers).
+Have a look at the [helpers](https://github.com/unixcharles/mock_server/blob/master/lib/mock_server/spec/helpers.rb).
 
 ## Pull request?
 

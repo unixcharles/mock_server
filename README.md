@@ -34,7 +34,7 @@ gem install mock_server
 
 ## Recording mode
 
-Create mount the rack application, in rails
+Mounting the rack middleware, in rails
 
 ```ruby
 require 'mock_server/record'

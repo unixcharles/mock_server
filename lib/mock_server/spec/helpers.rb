@@ -255,7 +255,7 @@ module MockServer
       #
       def add_mock_server_matcher(matcher)
         options = self.mock_server_options_read
-        options[:matchers] << matcher
+        options[:matchers].unshift(matcher)
         mock_server_options_write(options)
       end
 

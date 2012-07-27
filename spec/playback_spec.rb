@@ -60,4 +60,21 @@ describe "Playback" do
     assert_equal '{"json":"content"}', last_response.body
   end
 
+
+  it "give priority to the last registered matcher" do
+    @first_matcher = @second_matcher = 'not executed'
+
+    mock_server_get('/json_response.json') do
+      @first_matcher = 'executed!'
+    end
+
+    mock_server_get('/json_response.json') do
+      @second_matcher = 'executed!'
+    end
+
+    get '/json_response.json'
+    assert_equal @second_matcher, 'executed!'
+    assert_equal @first_matcher, 'not executed'
+  end
+
 end

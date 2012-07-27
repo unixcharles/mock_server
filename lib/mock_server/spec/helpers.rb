@@ -1,5 +1,5 @@
 unless defined? MockServer::Store
-  require_relative 'Store/global'
+  require 'mock_server/store/global'
 end
 
 module MockServer

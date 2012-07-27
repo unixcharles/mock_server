@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'mock_server'
-  s.version     = '0.2.4'
+  s.version     = '0.3.0'
   s.summary     = "Mock you're entire application"
   s.authors      = ['Charles Barbier', 'Saimon Moore']
   s.email       = 'unixcharles@gmail.com'

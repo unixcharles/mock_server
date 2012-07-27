@@ -77,4 +77,16 @@ describe "Playback" do
     assert_equal @first_matcher, 'not executed'
   end
 
+  it "it match with the matcher order when it has multiple recorded request" do
+    mock_server_get('/json_duplicated.json') do |request, recorded_request, recorded_response|
+      recorded_response.body.duplicated == 1
+    end
+
+    mock_server_get('/json_duplicated.json') do |request, recorded_request, recorded_response|
+      recorded_response.body.duplicated == 2
+    end
+
+    get '/json_duplicated.json'
+    assert_equal '{"duplicated":2}', last_response.body
+  end
 end

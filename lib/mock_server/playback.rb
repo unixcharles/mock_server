@@ -60,19 +60,20 @@ module MockServer
       }
 
       # Filter out matchers by path and method
-      matchers = @options[:matchers].select { |match| 
+      matchers = @options[:matchers].select { |match|
         request[:method].to_s.upcase == match[:method].to_s.upcase and request[:path] == match[:path]
       }
 
-      # Match the request with a record by validating against the matcher if any.
-      @data.detect { |entry|
-        recorded_request  = Hashie::Mash.new entry[:request]
-        recorded_response = entry[:response].dup
+      data = false
+      matchers.detect { |matcher|
+        # Match the request with a record by validating against the matcher if any.
+        data = @data.detect { |entry|
+          recorded_request  = Hashie::Mash.new entry[:request]
+          recorded_response = entry[:response].dup
 
-        recorded_response[:body] = JSON.parse(recorded_response[:body]) rescue recorded_response[:body]
-        recorded_response = Hashie::Mash.new recorded_response
+          recorded_response[:body] = JSON.parse(recorded_response[:body]) rescue recorded_response[:body]
+          recorded_response = Hashie::Mash.new recorded_response
 
-        matchers.detect { |matcher|
           if matcher[:matcher]
             result = true
             begin
@@ -88,6 +89,7 @@ module MockServer
           end
         }
       }
+      data
     end
 
     def store_matcher_exception(exception)

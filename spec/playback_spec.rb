@@ -66,10 +66,12 @@ describe "Playback" do
 
     mock_server_get('/json_response.json') do
       @first_matcher = 'executed!'
+      true
     end
 
     mock_server_get('/json_response.json') do
       @second_matcher = 'executed!'
+      true
     end
 
     get '/json_response.json'

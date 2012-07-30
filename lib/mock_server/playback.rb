@@ -74,19 +74,18 @@ module MockServer
           recorded_response[:body] = JSON.parse(recorded_response[:body]) rescue recorded_response[:body]
           recorded_response = Hashie::Mash.new recorded_response
 
-          if matcher[:matcher]
-            result = true
+          result = if matcher[:matcher]
             begin
-              matcher[:matcher].call(request, recorded_request, recorded_response)
+              result = matcher[:matcher].call(request, recorded_request, recorded_response)
             rescue => matcher_err
               store_matcher_exception(matcher_err)
               result = false
-            ensure
-              result
             end
+            result
           else
             true
           end
+          result == true
         }
       }
       data

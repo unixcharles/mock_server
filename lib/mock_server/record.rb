@@ -30,9 +30,9 @@ module MockServer
         response
       end
     end
-  
+
     private
-    
+
     def record_response(status, header, response)
       request = hashified_request
 
@@ -61,6 +61,5 @@ module MockServer
         []
       end
     end
-
   end
 end

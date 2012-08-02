@@ -25,30 +25,36 @@ module MockServer
       return @app.call(env) unless matchable_request?(env)
 
       @request = Rack::Request.new(env)
-
       @options[:requests_stack] << @request.path
-
       @data = load_data
 
-      record = match_request
-
-      response = if record
-        @options[:success_stack] << @request.path
-        @options[:matcher_exceptions].clear
-
-        response = record[:response]
-        [response[:status], response[:headers], [response[:body]]]
-      else
-        error = { @request.path => "Couldn't match #{@request.request_method} #{@request.path}" }
-        @options[:errors_stack] << error
-        [404, {}, ['RECORD NOT FOUND!']]
-      end
-
+      response = build_response
       self.mock_server_options_write(@options)
       response
     end
 
     private
+
+    def build_response
+      if record = match_request
+        return_record(record)
+      else
+        return_error
+      end
+    end
+
+    def return_record(record)
+      @options[:success_stack] << @request.path
+      @options[:matcher_exceptions].clear
+      response = record[:response]
+      [response[:status], response[:headers], [response[:body]]]
+    end
+
+    def return_error
+      error = { @request.path => "Couldn't match #{@request.request_method} #{@request.path}" }
+      @options[:errors_stack] << error
+      [404, {}, ['RECORD NOT FOUND!']]
+    end
 
     def match_request
       request = Hashie::Mash.new hashified_request

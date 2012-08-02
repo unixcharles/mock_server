@@ -59,14 +59,14 @@ class MockServer::Playback
     request = Hashie::Mash.new hashified_request
 
     # Filter out data records by path and method
-    data = filter_records(request)
+    records = filter_records(request)
 
     matchers = filter_matchers(request)
 
-    data = false
+    record = false
     matchers.detect { |matcher|
       # Match the request with a record by validating against the matcher if any.
-      data = @data.detect { |entry|
+      record = records.detect { |entry|
         recorded_request  = Hashie::Mash.new entry[:request]
         recorded_response = entry[:response].dup
 
@@ -76,7 +76,7 @@ class MockServer::Playback
         test_request_and_matcher(matcher, request, recorded_request, recorded_response)
       }
     }
-    data
+    record
   end
 
   def filter_matchers(request)

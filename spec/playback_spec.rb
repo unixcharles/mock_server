@@ -118,4 +118,12 @@ describe "Playback" do
     get '/json_duplicated.json'
     assert_equal 200, last_response.status
   end
+
+  it "match nothing, sometime" do
+    mock_server_get('/hello.json')
+    mock_server_get('/query.json')
+
+    get '/query.json'
+    assert_equal 'with params', last_response.body
+  end
 end

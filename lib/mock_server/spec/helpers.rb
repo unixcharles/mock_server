@@ -11,7 +11,7 @@ module MockServer::Spec
     #
     # Returns a String.
     def mock_server_inspect
-      mock_server_options.inspect
+      self.mock_server_options_read.inspect
     end
 
     # Public: Overwrite or initialize the list of fixtures

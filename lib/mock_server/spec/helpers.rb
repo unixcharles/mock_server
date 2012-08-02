@@ -133,6 +133,21 @@ module MockServer::Spec
       mock_server_request :put, path, block
     end
 
+    # Public: Register a matcher on a PATCH request for a given route.
+    #
+    # path    - Relative HTTP path to match
+    # &block  - Optional block for complex matching on the request
+    #
+    # Examples
+    #
+    #    mock_server_patch('/api/2/account')
+    #
+    #    mock_server_patch('/api/2/account') { |request, recorded_request| request.body == recorded_request.body }
+    #
+    def mock_server_patch(path, &block)
+      mock_server_request :patch, path, block
+    end
+
     # Public: Register a matcher on a DELETE request for a given route.
     #
     # path    - Relative HTTP path to match

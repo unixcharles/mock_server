@@ -6,7 +6,6 @@ module MockServer::Spec
   module Helpers
     include MockServer::Store
 
-
     # Public: Inspect mock server options
     #
     # Returns a String.

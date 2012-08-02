@@ -1,6 +1,6 @@
-require File.expand_path('../spec_helper', __FILE__)
-require File.expand_path('../../lib/mock_server/playback', __FILE__)
-require File.expand_path('../../lib/mock_server/spec/helpers', __FILE__)
+['../spec_helper','../../lib/mock_server/playback', '../../lib/mock_server/spec/helpers'].each { |file|
+  require File.expand_path(file, __FILE__)
+}
 
 describe "Playback" do
   include Rack::Test::Methods

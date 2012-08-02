@@ -55,14 +55,9 @@ module MockServer
       request = Hashie::Mash.new hashified_request
 
       # Filter out data records by path and method
-      @data = @data.select { |record|
-        record[:request][:path] == request[:path] and record[:request][:method] == request[:method]
-      }
+      data = filter_records(request)
 
-      # Filter out matchers by path and method
-      matchers = @options[:matchers].select { |match|
-        request[:method].to_s.upcase == match[:method].to_s.upcase and request[:path] == match[:path]
-      }
+      matchers = filter_matchers(request)
 
       data = false
       matchers.detect { |matcher|
@@ -74,21 +69,32 @@ module MockServer
           recorded_response[:body] = JSON.parse(recorded_response[:body]) rescue recorded_response[:body]
           recorded_response = Hashie::Mash.new recorded_response
 
-          result = if matcher[:matcher]
-            begin
-              result = matcher[:matcher].call(request, recorded_request, recorded_response)
-            rescue => matcher_err
-              store_matcher_exception(matcher_err)
-              result = false
-            end
-            result
-          else
-            true
-          end
-          result == true
+          test_request_and_matcher(matcher, request, recorded_request, recorded_response)
         }
       }
       data
+    end
+
+    def filter_matchers(request)
+      @options[:matchers].select { |match|
+        request[:method].to_s.upcase == match[:method].to_s.upcase and request[:path] == match[:path]
+      }
+    end
+
+    def filter_records(request)
+      @data.select { |record|
+        record[:request][:path] == request[:path] and record[:request][:method] == request[:method]
+      }
+    end
+
+    def test_request_and_matcher(matcher, request, recorded_request, recorded_response)
+      return true if matcher[:matcher].nil?
+      begin
+        matcher[:matcher].call(request, recorded_request, recorded_response) == true
+      rescue => matcher_err
+        store_matcher_exception(matcher_err)
+        false
+      end
     end
 
     def store_matcher_exception(exception)

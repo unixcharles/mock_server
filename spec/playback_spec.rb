@@ -13,6 +13,10 @@ describe "Playback" do
       :routes => [ '/**' ] })
   end
 
+  before do
+    mock_server_reset!
+  end
+
   it "return the response" do
     mock_server_get('/hello.json')
 
@@ -79,7 +83,7 @@ describe "Playback" do
     assert_equal @first_matcher, 'not executed'
   end
 
-  it "it match with the matcher order when it has multiple recorded request" do
+  it "match with the matcher order when it has multiple recorded request" do
     mock_server_get('/json_duplicated.json') do |request, recorded_request, recorded_response|
       recorded_response.body.duplicated == 1
     end
@@ -90,5 +94,28 @@ describe "Playback" do
 
     get '/json_duplicated.json'
     assert_equal '{"duplicated":2}', last_response.body
+  end
+
+  it "doesn't match when no block return true" do
+    mock_server_get('/json_duplicated.json') { nil }
+    mock_server_get('/json_duplicated.json') { 'string' }
+    mock_server_get('/json_duplicated.json') { raise 'error' }
+
+    get '/json_duplicated.json'
+    assert_equal 404, last_response.status
+  end
+
+  it "match when the block return true" do
+    mock_server_get('/json_duplicated.json') { true }
+
+    get '/json_duplicated.json'
+    assert_equal 200, last_response.status
+  end
+
+  it "match when there is not block" do
+    mock_server_get('/json_duplicated.json')
+
+    get '/json_duplicated.json'
+    assert_equal 200, last_response.status
   end
 end

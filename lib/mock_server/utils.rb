@@ -11,6 +11,10 @@ module MockServer
       puts %([MockServer] #{env["PATH_INFO"]} was #{interception}"\n)
     end
 
+    def matchable_request?(env)
+      @options[:routes] and lazy_match @options[:routes], env["PATH_INFO"]
+    end
+
     def lazy_match(strings, path)
       regexps = strings.map { |str|
         escaped = Regexp.escape(str)

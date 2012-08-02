@@ -22,8 +22,7 @@ module MockServer
       @options = self.mock_server_options_read
 
       verbose(env) if @options[:verbose]
-      return @app.call(env) unless @options[:routes] and
-                                   lazy_match @options[:routes], env["PATH_INFO"]
+      return @app.call(env) unless matchable_request?(env)
 
       @request = Rack::Request.new(env)
 

@@ -8,116 +8,118 @@ unless defined? MockServer::Store
   require 'mock_server/store/global'
 end
 
-class MockServer::Playback
-  include MockServer::Utils
-  include MockServer::Store
+module MockServer
+  class Playback
+    include MockServer::Utils
+    include MockServer::Store
 
-  def initialize(app, opt = {})
-    @app = app
-    @options = mock_server_options_merge(opt)
-  end
-
-  def call(env)
-    @options = self.mock_server_options_read
-
-    verbose(env) if @options[:verbose]
-    return @app.call(env) unless matchable_request?(env)
-
-    @request = Rack::Request.new(env)
-    @options[:requests_stack] << @request.path
-    @data = load_data
-
-    response = build_response
-    self.mock_server_options_write(@options)
-    response
-  end
-
-  private
-
-  def build_response
-    if record = match_request
-      return_record(record)
-    else
-      return_error
+    def initialize(app, opt = {})
+      @app = app
+      @options = mock_server_options_merge(opt)
     end
-  end
 
-  def return_record(record)
-    @options[:success_stack] << @request.path
-    @options[:matcher_exceptions].clear
-    response = record[:response]
-    [response[:status], response[:headers], [response[:body]]]
-  end
+    def call(env)
+      @options = self.mock_server_options_read
 
-  def return_error
-    error = { @request.path => "Couldn't match #{@request.request_method} #{@request.path}" }
-    @options[:errors_stack] << error
-    [404, {}, ['RECORD NOT FOUND!']]
-  end
+      verbose(env) if @options[:verbose]
+      return @app.call(env) unless matchable_request?(env)
 
-  def match_request
-    request = Hashie::Mash.new hashified_request
+      @request = Rack::Request.new(env)
+      @options[:requests_stack] << @request.path
+      @data = load_data
 
-    # Filter out data records by path and method
-    records = filter_records(request)
+      response = build_response
+      self.mock_server_options_write(@options)
+      response
+    end
 
-    matchers = filter_matchers(request)
+    private
 
-    record = false
-    matchers.detect { |matcher|
-      # Match the request with a record by validating against the matcher if any.
-      record = records.detect { |entry|
-        recorded_request  = Hashie::Mash.new entry[:request]
-        recorded_response = entry[:response].dup
+    def build_response
+      if record = match_request
+        return_record(record)
+      else
+        return_error
+      end
+    end
 
-        recorded_response[:body] = JSON.parse(recorded_response[:body]) rescue recorded_response[:body]
-        recorded_response = Hashie::Mash.new recorded_response
+    def return_record(record)
+      @options[:success_stack] << @request.path
+      @options[:matcher_exceptions].clear
+      response = record[:response]
+      [response[:status], response[:headers], [response[:body]]]
+    end
 
-        test_request_and_matcher(matcher, request, recorded_request, recorded_response)
+    def return_error
+      error = { @request.path => "Couldn't match #{@request.request_method} #{@request.path}" }
+      @options[:errors_stack] << error
+      [404, {}, ['RECORD NOT FOUND!']]
+    end
+
+    def match_request
+      request = Hashie::Mash.new hashified_request
+
+      # Filter out data records by path and method
+      records = filter_records(request)
+
+      matchers = filter_matchers(request)
+
+      record = false
+      matchers.detect { |matcher|
+        # Match the request with a record by validating against the matcher if any.
+        record = records.detect { |entry|
+          recorded_request  = Hashie::Mash.new entry[:request]
+          recorded_response = entry[:response].dup
+
+          recorded_response[:body] = JSON.parse(recorded_response[:body]) rescue recorded_response[:body]
+          recorded_response = Hashie::Mash.new recorded_response
+
+          test_request_and_matcher(matcher, request, recorded_request, recorded_response)
+        }
       }
-    }
-    record
-  end
-
-  def filter_matchers(request)
-    @options[:matchers].select { |match|
-      request[:method].to_s.upcase == match[:method].to_s.upcase and request[:path] == match[:path]
-    }
-  end
-
-  def filter_records(request)
-    @data.select { |record|
-      record[:request][:path] == request[:path] and record[:request][:method] == request[:method]
-    }
-  end
-
-  def test_request_and_matcher(matcher, request, recorded_request, recorded_response)
-    return true if matcher[:matcher].nil?
-    begin
-      matcher[:matcher].call(request, recorded_request, recorded_response) == true
-    rescue => matcher_err
-      store_matcher_exception(matcher_err)
-      false
-    end
-  end
-
-  def store_matcher_exception(exception)
-    @options[:matcher_exceptions] << exception
-  end
-
-  def load_data
-    FileUtils.mkdir_p(@options[:path]) unless File.exists? @options[:path]
-
-    data = []
-
-    @options[:record_filenames].map do |filename|
-      file_path = File.join( @options[:path], filename + '.yml' )
-      content   = File.open(file_path).read
-      compiled  = ERB.new(content).result
-      parsed    = YAML.load(compiled)
-      data     += parsed
+      record
     end
 
-    data
+    def filter_matchers(request)
+      @options[:matchers].select { |match|
+        request[:method].to_s.upcase == match[:method].to_s.upcase and request[:path] == match[:path]
+      }
+    end
+
+    def filter_records(request)
+      @data.select { |record|
+        record[:request][:path] == request[:path] and record[:request][:method] == request[:method]
+      }
+    end
+
+    def test_request_and_matcher(matcher, request, recorded_request, recorded_response)
+      return true if matcher[:matcher].nil?
+      begin
+        matcher[:matcher].call(request, recorded_request, recorded_response) == true
+      rescue => matcher_err
+        store_matcher_exception(matcher_err)
+        false
+      end
+    end
+
+    def store_matcher_exception(exception)
+      @options[:matcher_exceptions] << exception
+    end
+
+    def load_data
+      FileUtils.mkdir_p(@options[:path]) unless File.exists? @options[:path]
+
+      data = []
+
+      @options[:record_filenames].map do |filename|
+        file_path = File.join( @options[:path], filename + '.yml' )
+        content   = File.open(file_path).read
+        compiled  = ERB.new(content).result
+        parsed    = YAML.load(compiled)
+        data     += parsed
+      end
+
+      data
+    end
   end
 end

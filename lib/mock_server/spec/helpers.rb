@@ -2,7 +2,7 @@ unless defined? MockServer::Store
   require 'mock_server/store/global'
 end
 
-module MockServer::Spec
+module MockServer; module Spec
   module Helpers
     include MockServer::Store
 
@@ -298,4 +298,4 @@ module MockServer::Spec
     end
 
   end
-end
+end; end

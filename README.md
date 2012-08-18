@@ -1,44 +1,51 @@
-# MockServer
+MockServer
+==========
 
-__MockServer let you record interactions with Rack-apps and provide playback with advanced request matching for your tests.__
+MockServer let you record interactions with Rack-apps and provide playback with advanced request matching for your tests.
 
-[![Build Status](https://secure.travis-ci.org/unixcharles/mock_server.png?branch=master)](http://travis-ci.org/unixcharles/mock_server)
+Its a solution to a real world problem that came up at [Teambox](http://teambox.com) where we use it extensively for our acceptance test suite.
 
-MockServer is an answer from a real world problem at [Teambox](http://teambox.com) and we use it extensively for our entire acceptance test suites.
+When building javascript application that communicate with the backend over an API, you will find yourself testing the entire stack again and again, waiting after the database while you only want ensure that your javascript applicatin is correctly communicating with the server.
 
-When building javascript application that communicate with the backend over an API, you will find yourself the entire stack again and again, waiting after the database while you only want ensure that your javascript applicatin is correctly communicating with the server.
+Our solution was to considere our own backend as it was an external service and completely mock the API interaction.
 
-Our solution was to considere our own backend as it was an external API and completely mock the interaction with the API.
-
-### Speed. Its fast.
+Speed. Its fast.
+----------------
 
 Run test against a completely fake server, don't hit you application stack.
 
-### Test isolation.
+Test isolation.
+---------------
 
 Avoid duplicated testing. Test your API in its own test suite and let the frontend perform request against fixtures to avoid testing the entire stack (again).
 
-MockServer is a very light solution divided in three parts.
+How it work
+-----------
+
+MockServer is a very light solution with three parts.
 
 * a recording Rack middleware
 * a playback Rack middleware
 * an helper module to use inside your tests
 
-# Getting started
+Getting started
+===============
 
-## Installation
+Installation
+------------
 
 ```bash
 gem install mock_server
 ```
 
-## Recording mode
+Recording mode
+--------------
 
 Mounting the rack middleware, in rails
 
 ```ruby
 require 'mock_server/record'
-config.middleware.use MockServer::Record, 
+config.middleware.use MockServer::Record,
   { :path => 'fixtures/records', :filename => 'api'
     :routes => [ '/api/*/**', '/api_v2/**' ] }
 ```
@@ -47,13 +54,14 @@ At this point, the `MockServer::Record` middleware will record all the intractio
 
 You can record from your test or just boot the app and click around, be creative.
 
-## Playback mode
+Playback mode
+-------------
 
-Once you are done recording, disable the `MockServer::Record`, and you are ready to use the `MockServer::Playback` middleware.
+Once you are done recording, disable the `MockServer::Record`. You are ready to use the `MockServer::Playback` middleware.
 
 ```ruby
 require 'mock_server/playback'
-config.middleware.use MockServer::Playback, 
+config.middleware.use MockServer::Playback,
   { :path => 'fixtures/records' }
 ```
 
@@ -61,7 +69,7 @@ You are now ready to test.
 
 ## Rspec
 
-MockServer is just two record/playback Rack middleware, but it also come with an helper module to maniplate its settings.
+MockServer come with an helper module to load fixture, listen to paths and register matchers.
 
 You just need to include the module in your test.
 
@@ -78,16 +86,14 @@ Inside your test, basic usage exemple:
 
 ```ruby
 before :each do
-
   # Set the filename where you store the records
   # in this exemple, it will load `fixtures/records/bootsrap.yml`
   # and `fixtures/records/uploads.yml`
   mock_server_use_record 'bootsrap', 'uploads'
 
-  # From now on, those path belong to MockServer.
-  # if we can't match to a record, the server return a 404 and populate the errors stack.
-  mock_server_enable_routes '**/uploads/*', '**/uploads', '**/folders'
-
+  # From now on, those paths belong to MockServer.
+  # if we can't find a record with the matchers, the server return a 404 and populate the errors stack.
+  mock_server_enable_routes '/api/2/**'
 end
 
 after :each do
@@ -126,6 +132,6 @@ Yes.
 
 ## Credits
 
-MockServer borrow idea of the awesome [VCR](https://github.com/myronmarston/vcr) from [Myron Marston](https://github.com/myronmarston) that does similar work with HTTP interactions to external services. Give it a look!
+MockServer borrow awesome ideas of [VCR](https://github.com/myronmarston/vcr) from [Myron Marston](https://github.com/myronmarston) that does similar work with HTTP interactions to external services.
 
-MockServer is developped and improved for our internal use at [Teambox](http://teambox.com/). Kudos to my work mates for their insightful feedback and pull requests.
+MockServer actively developped for our internal use at [Teambox](http://teambox.com/). Thanks to my colleges for their insightful feedback and pull requests.

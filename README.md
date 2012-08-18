@@ -1,5 +1,5 @@
 MockServer
-==========
+----------
 
 MockServer let you record interactions with Rack-apps and provide playback with advanced request matching for your tests.
 
@@ -9,18 +9,15 @@ When building javascript application that communicate with the backend over an A
 
 Our solution was to considere our own backend as it was an external service and completely mock the API interaction.
 
-Speed. Its fast.
-----------------
+### Speed. Its fast.
 
 Run test against a completely fake server, don't hit you application stack.
 
-Test isolation.
----------------
+### Test isolation.
 
 Avoid duplicated testing. Test your API in its own test suite and let the frontend perform request against fixtures to avoid testing the entire stack (again).
 
-How it work
------------
+## How it work
 
 MockServer is a very light solution with three parts.
 
@@ -29,17 +26,15 @@ MockServer is a very light solution with three parts.
 * an helper module to use inside your tests
 
 Getting started
-===============
+---------------
 
-Installation
-------------
+### Installation
 
 ```bash
 gem install mock_server
 ```
 
-Recording mode
---------------
+### Recording mode
 
 Mounting the rack middleware, in rails
 
@@ -54,8 +49,7 @@ At this point, the `MockServer::Record` middleware will record all the intractio
 
 You can record from your test or just boot the app and click around, be creative.
 
-Playback mode
--------------
+### Playback mode
 
 Once you are done recording, disable the `MockServer::Record`. You are ready to use the `MockServer::Playback` middleware.
 
@@ -67,7 +61,7 @@ config.middleware.use MockServer::Playback,
 
 You are now ready to test.
 
-## Rspec
+### Rspec
 
 MockServer come with an helper module to load fixture, listen to paths and register matchers.
 

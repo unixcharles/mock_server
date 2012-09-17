@@ -46,7 +46,8 @@ module MockServer
 
     def save_data(data)
       File.open(records_path, 'w') do |f|
-        YAML.dump(data, f)
+        yaml = YAML.dump(data)
+        f.write(yaml)
       end
     end
 
